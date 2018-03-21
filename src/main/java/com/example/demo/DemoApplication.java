@@ -21,7 +21,7 @@ public class DemoApplication {
 		SpringApplication.run(DemoApplication.class, args);
 	}
 	@Bean
-			public SessionFactory sessionFactory() {
+			public Session sessionFactory() {
 		Configuration configuration = new Configuration();
 		configuration.addAnnotatedClass(Test.class);
 //		configuration.addAnnotatedClass(TwoWheeler.class);
@@ -30,12 +30,12 @@ public class DemoApplication {
 		StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties())
 				.build();
-		return configuration.buildSessionFactory(serviceRegistry);
+		final SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+		return sessionFactory.openSession();
 	}
 
 	@Bean
-    public Object object(SessionFactory sessionFactory){
-        final Session session = sessionFactory.openSession();
+    public Object object(Session session){
         final Transaction transaction = session.beginTransaction();
 		final Test test = new Test();
 		test.setName("Asdfasdf");
