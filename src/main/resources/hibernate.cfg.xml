@@ -11,9 +11,6 @@
         <property name="hibernate.connection.password">password</property>
         <property name="hibernate.hbm2ddl.auto">create</property>
         <property name="hibernate.show_sql">true</property>
-        <mapping class="pl.sda.inheritance.model.Vehicle"/>
-        <mapping class="pl.sda.inheritance.model.TwoWheeler"/>
-        <mapping class="pl.sda.inheritance.model.FourWheeler"/>
-        <mapping class="pl.sda.inheritance.model.AbstractEntity"/>
+
     </session-factory>
 </hibernate-configuration>
