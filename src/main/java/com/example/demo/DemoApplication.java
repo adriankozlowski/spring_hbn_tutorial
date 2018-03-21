@@ -3,44 +3,71 @@ package com.example.demo;
 import com.example.demo.model.Test;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.AvailableSettings;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.ServletContextApplicationContextInitializer;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
+import java.util.Properties;
+
 
 @SpringBootApplication
+//@EnableTransactionManagement
 public class DemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
-	}
-	@Bean
-			public Session sessionFactory() {
-		Configuration configuration = new Configuration();
-		configuration.addAnnotatedClass(Test.class);
-//		configuration.addAnnotatedClass(TwoWheeler.class);
-//		configuration.addAnnotatedClass(FourWheeler.class);
-		configuration.configure();
-		StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties())
-				.build();
-		final SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-		return sessionFactory.openSession();
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
 
-	@Bean
-    public Object object(Session session){
-        final Transaction transaction = session.beginTransaction();
-		final Test test = new Test();
-		test.setName("Asdfasdf");
-		session.save(test);
-        transaction.commit();
+    @Bean
+    public DataSource getDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://192.168.99.100:3306/inheritance?createDatabaseIfNotExist=true");
+        dataSource.setUsername("root");
+        dataSource.setPassword("password");
+        return dataSource;
+    }
+
+    @Bean
+    public LocalSessionFactoryBean getSessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(getDataSource());
+        sessionFactory.setPackagesToScan(new String[] { "com.example.demo.model" });
+        sessionFactory.setHibernateProperties(getHibernateProperties());
+        return sessionFactory;
+    }
+
+    private Properties getHibernateProperties() {
+        Properties properties = new Properties();
+        properties.put(AvailableSettings.DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect");
+        properties.put(AvailableSettings.SHOW_SQL, "true");
+        properties.put(AvailableSettings.STATEMENT_BATCH_SIZE, "20");
+        properties.put(AvailableSettings.HBM2DDL_AUTO, "create");
+        properties.put(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, "org.springframework.orm.hibernate5.SpringSessionContext");
+        return properties;
+    }
+
+//    @Bean
+//    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+//        HibernateTransactionManager txManager = new HibernateTransactionManager();
+//        txManager.setSessionFactory(sessionFactory);
+//        return txManager;
+//    }
+
+
+    @Bean
+    public Object object(SessionFactory sessionFactory) {
+        final Session currentSession = sessionFactory.openSession();
+        final Test test = new Test();
+        test.setName("Asdfasdf");
+        currentSession.save(test);
+        sessionFactory.close();
         return new Object();
     }
 
