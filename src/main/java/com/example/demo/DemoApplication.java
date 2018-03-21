@@ -37,7 +37,9 @@ public class DemoApplication {
     public Object object(SessionFactory sessionFactory){
         final Session session = sessionFactory.openSession();
         final Transaction transaction = session.beginTransaction();
-        session.save(new Test());
+		final Test test = new Test();
+		test.setName("Asdfasdf");
+		session.save(test);
         transaction.commit();
         return new Object();
     }
