@@ -8,32 +8,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class MyController {
+public class MyOtherController {
 
-
-    @Autowired
-    private SessionFactory sessionFactory;
 
     @Autowired
     RequestScopedBean requestScopedBean;
     @Autowired
+    private SessionFactory sessionFactory;
+    @Autowired
     private PrototypeClass prototypeClass;
 
 
-    @GetMapping("/index")
-    public String getList(){
+    @GetMapping("/index2")
+    public String getList() {
         String name = prototypeClass.getName();
-        prototypeClass.setName("jakis name");
         System.out.println(name);
         String string = requestScopedBean.toString();
         return "index";
     }
 
-    @GetMapping("/i")
-    public String gett() {
-        String name = prototypeClass.getName();
-        System.out.println(name);
-        String s = requestScopedBean.toString();
-        return "index";
-    }
 }

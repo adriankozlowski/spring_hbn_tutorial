@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.classes.PrototypeClass;
 import com.example.demo.classes.RequestScopedBean;
 import com.example.demo.model.Test;
 import org.hibernate.Session;
@@ -16,6 +17,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.sql.DataSource;
 import java.util.Properties;
+
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 
 @SpringBootApplication
@@ -76,5 +79,11 @@ public class DemoApplication {
     @Scope(scopeName = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
     public RequestScopedBean getRequestScopedBean() {
         return new RequestScopedBean();
+    }
+
+    @Bean
+    @Scope(scopeName = SCOPE_PROTOTYPE)
+    public PrototypeClass getPrototypeClass() {
+        return new PrototypeClass();
     }
 }
