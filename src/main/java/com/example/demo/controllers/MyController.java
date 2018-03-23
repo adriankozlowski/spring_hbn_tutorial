@@ -1,7 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.classes.PrototypeClass;
-import com.example.demo.classes.RequestScopedBean;
+import com.example.demo.classes.SessionClass;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,25 +14,19 @@ public class MyController {
     private SessionFactory sessionFactory;
 
     @Autowired
-    RequestScopedBean requestScopedBean;
-    @Autowired
-    private PrototypeClass prototypeClass;
+    private SessionClass sessionClass;
 
 
     @GetMapping("/index")
     public String getList(){
-        String name = prototypeClass.getName();
-        prototypeClass.setName("jakis name");
-        System.out.println(name);
-        String string = requestScopedBean.toString();
+
+        sessionClass.setCounter(sessionClass.getCounter() + 1);
         return "index";
     }
 
     @GetMapping("/i")
     public String gett() {
-        String name = prototypeClass.getName();
-        System.out.println(name);
-        String s = requestScopedBean.toString();
+        sessionClass.setCounter(sessionClass.getCounter() + 1);
         return "index";
     }
 }

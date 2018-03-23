@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.classes.PrototypeClass;
 import com.example.demo.classes.RequestScopedBean;
+import com.example.demo.classes.SessionClass;
 import com.example.demo.model.Test;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,6 +10,7 @@ import org.hibernate.cfg.AvailableSettings;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -19,6 +21,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
+import static org.springframework.web.context.WebApplicationContext.SCOPE_SESSION;
 
 
 @SpringBootApplication
@@ -76,7 +79,7 @@ public class DemoApplication {
     }
 
     @Bean()
-    @Scope(scopeName = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    @Scope(scopeName = WebApplicationContext.SCOPE_REQUEST)
     public RequestScopedBean getRequestScopedBean() {
         return new RequestScopedBean();
     }
@@ -85,5 +88,12 @@ public class DemoApplication {
     @Scope(scopeName = SCOPE_PROTOTYPE)
     public PrototypeClass getPrototypeClass() {
         return new PrototypeClass();
+    }
+
+    @Bean
+    @Lazy
+    @Scope(scopeName = SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public SessionClass getSessionClass() {
+        return new SessionClass();
     }
 }

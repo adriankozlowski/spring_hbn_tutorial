@@ -1,8 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.classes.PrototypeClass;
-import com.example.demo.classes.RequestScopedBean;
-import org.hibernate.SessionFactory;
+import com.example.demo.classes.SessionClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,18 +10,13 @@ public class MyOtherController {
 
 
     @Autowired
-    RequestScopedBean requestScopedBean;
-    @Autowired
-    private SessionFactory sessionFactory;
-    @Autowired
-    private PrototypeClass prototypeClass;
+    private SessionClass sessionClass;
 
 
     @GetMapping("/index2")
     public String getList() {
-        String name = prototypeClass.getName();
-        System.out.println(name);
-        String string = requestScopedBean.toString();
+        sessionClass.setCounter(sessionClass.getCounter() + 1);
+        System.out.println(sessionClass.getCounter());
         return "index";
     }
 
