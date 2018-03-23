@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.classes.RequestScopedBean;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,37 +13,18 @@ public class MyController {
     @Autowired
     private SessionFactory sessionFactory;
 
+    @Autowired
+    RequestScopedBean requestScopedBean;
+
     @GetMapping("/index")
     public String getList(){
-//            Session session = sessionFactory.openSession();
-//            Transaction transaction = session.beginTransaction();
-//        try {
-//            Test abstractEntity = new Test();
-////		abstractEntity.setAdded(new Date().toString());
-////		abstractEntity.setModified(new Date().toString());
-//            session.save(abstractEntity);
-//            transaction.commit();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            transaction.rollback();
-//        }
+        String string = requestScopedBean.toString();
         return "index";
     }
 
     @GetMapping("/i")
     public String gett() {
-//            Session session = sessionFactory.openSession();
-//            Transaction transaction = session.beginTransaction();
-//        try {
-//            Test abstractEntity = new Test();
-////		abstractEntity.setAdded(new Date().toString());
-////		abstractEntity.setModified(new Date().toString());
-//            session.save(abstractEntity);
-//            transaction.commit();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            transaction.rollback();
-//        }
+        String s = requestScopedBean.toString();
         return "index";
     }
 }

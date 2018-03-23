@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.classes.RequestScopedBean;
 import com.example.demo.model.Test;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -7,8 +8,11 @@ import org.hibernate.cfg.AvailableSettings;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -68,4 +72,9 @@ public class DemoApplication {
         return new Object();
     }
 
+    @Bean()
+    @Scope(scopeName = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public RequestScopedBean getRequestScopedBean() {
+        return new RequestScopedBean();
+    }
 }
