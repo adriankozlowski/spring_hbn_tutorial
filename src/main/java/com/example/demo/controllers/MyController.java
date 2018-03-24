@@ -22,7 +22,7 @@ public class MyController {
     @GetMapping("/index")
     public String getList(){
 
-        sessionClass.setCounter(sessionClass.getCounter() + 1);
+//        sessionClass.setCounter(sessionClass.getCounter() + 1);
         return "index";
     }
 
