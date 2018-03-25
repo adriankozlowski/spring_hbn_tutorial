@@ -7,5 +7,17 @@
 </head>
 <body>
 <p th:text="${greeting}"></p>
+<form method="post" action="/hello">
+    <label for="name">Imię</label>
+    <input type="text" id="name" name="name"/>
+    <br>
+    <label for="age">Wiek</label>
+    <input type="text" id="age" name="age"/>
+    <br>
+    <label for="sex">Płeć (k/m)</label>
+    <input type="text" id="sex" name="sex"/>
+    <br>
+    <input type="submit" value="OK">
+</form>
 </body>
 </html>
